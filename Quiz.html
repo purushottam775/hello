@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ultimate Finance Quiz</title>
+    <link rel="stylesheet" href="quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="dashboard.html" class="home-btn"><i class="fas fa-home"></i> Home</a>
+            <span class="brand">SavvyMoney Quiz</span>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <i class="fas fa-moon" id="moonIcon"></i>
+            <i class="fas fa-sun" id="sunIcon" style="display:none;"></i>
+        </button>
+    </nav>
+    <div class="quiz-container">
+        <h1>Ultimate Finance Quiz</h1>
+        <button id="start-btn">Start Quiz</button>
+        <div id="quiz-section" style="display:none;">
+            <div id="quiz"></div>
+            <button id="next-btn">Next</button>
+            <div id="result"></div>
+        </div>
+    </div>
+    <script src="quiz.js"></script>
+</body>
+</html> 

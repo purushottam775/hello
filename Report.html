@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finance Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      color: #003366;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+
+    body.dark-mode .navbar {
+      background-color: #2d2d2d;
+    }
+
+    body.dark-mode .left-panel,
+    body.dark-mode .right-panel {
+      background: #2d2d2d;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    body.dark-mode .advice {
+      background-color: #3d3d3d;
+      border-left: 6px solid #4a90e2;
+    }
+
+    .navbar {
+      background-color: #003366;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-button {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 8px 15px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .nav-button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-toggle i {
+      font-size: 18px;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .main-container {
+      display: flex;
+      max-width: 1200px;
+      margin: auto;
+      padding: 30px;
+      gap: 40px;
+    }
+
+    .left-panel {
+      flex: 1;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .right-panel {
+      flex: 1.5;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .summary {
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .summary span {
+      display: block;
+      margin: 10px 0;
+    }
+
+    .advice {
+      padding: 15px;
+      background-color: #e7f3ff;
+      border-left: 6px solid #003366;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    canvas {
+      width: 100% !important;
+      max-width: 400px !important;
+      height: auto !important;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="dashboard.html" class="nav-button">
+        <i class="fas fa-home"></i>
+        Home
+      </a>
+      <a href="Calendar.html" class="nav-button">
+        <i class="fas fa-calendar"></i>
+        Back to Calendar
+      </a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun"></i>
+        <span>Toggle Theme</span>
+      </button>
+    </div>
+  </nav>
+
+  <h1>Financial Report Overview</h1>
+
+  <div class="main-container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <div class="summary" id="summary"></div>
+      <div class="advice" id="adviceBox"></div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <canvas id="pieChart"></canvas>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // Add this at the beginning of your script section
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+    
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+    updateThemeIcon(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+      updateThemeIcon(isDarkMode ? 'dark' : 'light');
+    });
+
+    function updateThemeIcon(theme) {
+      themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+
+    const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+    let income = 0, expense = 0, saving = 0;
+
+    transactions.forEach(t => {
+      const amt = parseFloat(t.amount);
+      if (t.type === 'income') income += amt;
+      else if (t.type === 'expense') expense += amt;
+      else if (t.type === 'saving') saving += amt;
+    });
+
+    document.getElementById('summary').innerHTML = `
+      <span>💰 Total Income: $${income.toFixed(2)}</span>
+      <span>📉 Total Expense: $${expense.toFixed(2)}</span>
+      <span>🏦 Total Saving: $${saving.toFixed(2)}</span>
+    `;
+
+    const ctxPie = document.getElementById('pieChart').getContext('2d');
+    new Chart(ctxPie, {
+      type: 'pie',
+      data: {
+        labels: ['Income', 'Expense', 'Saving'],
+        datasets: [{
+          data: [income, expense, saving],
+          backgroundColor: ['#28a745', '#dc3545', '#007bff'],
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Distribution of Finances'
+          }
+        }
+      }
+    });
+
+    const ctxBar = document.getElementById('barChart').getContext('2d');
+    const monthlyData = {};
+
+    transactions.forEach(t => {
+      const month = new Date(t.date).toLocaleString('default', { month: 'short', year: 'numeric' });
+      if (!monthlyData[month]) monthlyData[month] = { income: 0, expense: 0, saving: 0 };
+      monthlyData[month][t.type] += parseFloat(t.amount);
+    });
+
+    const months = Object.keys(monthlyData);
+    const incomes = months.map(m => monthlyData[m].income);
+    const expenses = months.map(m => monthlyData[m].expense);
+    const savings = months.map(m => monthlyData[m].saving);
+
+    new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          { label: 'Income', data: incomes, backgroundColor: '#28a745' },
+          { label: 'Expense', data: expenses, backgroundColor: '#dc3545' },
+          { label: 'Saving', data: savings, backgroundColor: '#007bff' }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Monthly Financial Trends'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Advice Logic
+    let advice = '';
+    if (expense > income) {
+      advice = "⚠️ Your expenses exceed your income. Try trimming non-essential costs.";
+    } else if (saving >= 0.3 * income) {
+      advice = "✅ Excellent! You're saving over 30% of your income.";
+    } else if (saving < 0.1 * income) {
+      advice = "💡 Consider increasing your savings to at least 10% of income.";
+    } else {
+      advice = "📊 Good job! Maintain balanced finances and aim for better saving.";
+    }
+
+    document.getElementById('adviceBox').textContent = advice;
+  </script>
+</body>
+</html>

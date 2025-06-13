@@ -1,0 +1,111 @@
+/* Analytics Page Specific Styles */
+
+.analytics-container {
+    padding-top: 20px; /* Adjust spacing below navbar */
+}
+
+.analytics-container .header h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+.chart-filters {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding-right: 10px;
+}
+
+.chart-filters label {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.chart-filters select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-filters select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(75, 0, 130, 0.2);
+    outline: none;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+.chart-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px var(--shadow-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center chart title and canvas */
+}
+
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px var(--shadow-medium);
+}
+
+.chart-card h2 {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.chart-card canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Dark mode adjustments for analytics page */
+body.dark-mode .analytics-container .header h1,
+body.dark-mode .chart-filters label,
+body.dark-mode .chart-filters select,
+body.dark-mode .chart-card h2 {
+    color: var(--text-color);
+}
+
+body.dark-mode .chart-filters select {
+    background-color: #4a4a4a;
+    border-color: #777;
+}
+
+body.dark-mode .chart-filters select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.3);
+}
+
+body.dark-mode .chart-card {
+    background-color: var(--card-bg);
+    box-shadow: 0 5px 15px var(--shadow-light);
+}
+
+@media (max-width: 768px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-filters {
+        flex-direction: column;
+        align-items: center;
+    }
+} 

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Manager</title>
+    <link rel="stylesheet" href="bill-reminder.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="top-nav">
+        <div class="nav-left">
+           
+            <a href="dashboard.html" class="home-link"><i class="fas fa-home"></i> Home</a>
+        </div>
+        <div class="theme-toggle">
+            <button id="themeToggle" class="theme-toggle-btn">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <h1 class="page-title"><i class="fas fa-calendar-alt"></i> Bill Manager by SavvyMoney</h1>
+
+        <div class="summary-grid">
+            <div class="card summary-card">
+                <div class="card-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <h3>Financial Summary</h3>
+                <p>Pending: <span id="pendingAmount">₹0.00</span></p>
+                <p>Paid: <span id="paidAmount">₹0.00</span></p>
+            </div>
+            <div class="card summary-card">
+                <div class="card-icon"><i class="fas fa-chart-pie"></i></div>
+                <h3>Category Breakdown</h3>
+                <div id="categoryBreakdown">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+            <div class="card summary-card">
+                <div class="card-icon"><i class="fas fa-bolt"></i></div>
+                <h3>Quick Actions</h3>
+                <div class="quick-actions-buttons">
+                    <button class="btn btn-secondary" id="exportDataBtn">Export Data</button>
+                    <button class="btn btn-secondary" id="importDataBtn">Import Data</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bill-manager-container">
+            <div class="card add-bill-card">
+                <h2>Add Bill Reminder</h2>
+                <div class="form-group">
+                    <label for="billName">Bill Name:</label>
+                    <input type="text" id="billName" placeholder="Electricity Bill">
+                </div>
+                <div class="form-group">
+                    <label for="billAmount">Amount (₹)</label>
+                    <input type="number" id="billAmount" min="0" placeholder="2500.00">
+                </div>
+                <div class="form-group">
+                    <label for="dueDate">Due Date</label>
+                    <input type="date" id="dueDate">
+                </div>
+                <div class="form-group">
+                    <label for="billCategory">Category</label>
+                    <select id="billCategory">
+                        <option value="">Select Category</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Rent">Rent</option>
+                        <option value="Subscriptions">Subscriptions</option>
+                        <option value="Loans">Loans</option>
+                        <option value="Groceries">Groceries</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="billRecurrence">Recurrence:</label>
+                    <select id="billRecurrence">
+                        <option value="None">None</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Bi-Weekly">Bi-Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Quarterly">Quarterly</option>
+                        <option value="Annually">Annually</option>
+                    </select>
+                </div>
+                <button class="btn add-reminder-btn" id="addBillBtn"><i class="fas fa-plus"></i> Add Reminder</button>
+            </div>
+
+            <div class="card bills-display-section">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="unpaid">Unpaid</button>
+                    <button class="filter-btn" data-filter="overdue">Overdue</button>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Rent">Rent</option>
+                        <option value="Subscriptions">Subscriptions</option>
+                        <option value="Loans">Loans</option>
+                        <option value="Groceries">Groceries</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="bill-list-container">
+                    <ul id="billList">
+                        <!-- Bill items will be rendered here by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="bill-reminder.js"></script>
+</body>
+</html> 

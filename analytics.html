@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Analytics</title>
+    <link rel="stylesheet" href="css/trasaction.css"> <!-- Reuse main styles -->
+    <link rel="stylesheet" href="css/analytics.css"> <!-- Dedicated analytics styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="top-navbar">
+        <div class="navbar-left">
+            <a href="transactions.html" class="home-button"><i class="fas fa-arrow-left"></i> Back to Transactions</a>
+        </div>
+        <div class="navbar-right">
+            <button id="themeToggle" class="theme-toggle-btn">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+    <div class="container analytics-container">
+        <header class="header">
+            <h1>Financial Overview & Analytics</h1>
+        </header>
+
+        <main class="main-content">
+            <div class="chart-filters">
+                <label for="chartTimePeriod">View:</label>
+                <select id="chartTimePeriod">
+                    <option value="this-month">This Month</option>
+                    <option value="last-month">Last Month</option>
+                    <option value="this-year">This Year</option>
+                    <option value="all-time">All Time</option>
+                </select>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h2>Expenses by Category</h2>
+                    <canvas id="expensesByCategoryChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h2>Income vs. Expenses (Monthly)</h2>
+                    <canvas id="incomeExpensesChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h2>Top Categories</h2>
+                    <canvas id="topCategoriesChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h2>Income by Category</h2>
+                    <canvas id="incomeByCategoryChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h2>Monthly Net Balance</h2>
+                    <canvas id="monthlyNetBalanceChart"></canvas>
+                </div>
+                <!-- Add more charts as needed -->
+            </div>
+        </main>
+    </div>
+
+    <script src="js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleBtn = document.getElementById('themeToggle');
+            const body = document.body;
+
+            // Apply saved theme on load
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.classList.add(savedTheme);
+                if (savedTheme === 'dark-mode') {
+                    themeToggleBtn.querySelector('i').classList.remove('fa-moon');
+                    themeToggleBtn.querySelector('i').classList.add('fa-sun');
+                } else {
+                    themeToggleBtn.querySelector('i').classList.remove('fa-sun');
+                    themeToggleBtn.querySelector('i').classList.add('fa-moon');
+                }
+            } else {
+                // Default to light mode if no theme is saved
+                body.classList.remove('dark-mode');
+                themeToggleBtn.querySelector('i').classList.remove('fa-sun');
+                themeToggleBtn.querySelector('i').classList.add('fa-moon');
+            }
+
+            // Toggle theme on button click
+            themeToggleBtn.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                if (body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark-mode');
+                    themeToggleBtn.querySelector('i').classList.remove('fa-moon');
+                    themeToggleBtn.querySelector('i').classList.add('fa-sun');
+                } else {
+                    localStorage.setItem('theme', 'light-mode');
+                    themeToggleBtn.querySelector('i').classList.remove('fa-sun');
+                    themeToggleBtn.querySelector('i').classList.add('fa-moon');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

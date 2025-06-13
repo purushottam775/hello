@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - Smart Student Budget Planner</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/transactions-enhanced.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="transactions-body">
+    <div class="dashboard-container">
+        <!-- Enhanced Main Content -->
+        <main class="main-content">
+            <!-- Navigation Bar -->
+            <nav class="top-navbar">
+                <div class="nav-left">
+                    <a href="dashboard.html" class="nav-home-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Home</span>
+                    </a>
+                </div>
+                <div class="nav-center">
+                    <h2 class="finance-tracker-title">Finance Tracker</h2>
+                </div>
+                <div class="nav-right">
+                    <!-- Dark/Light Mode Toggle -->
+                    <button id="themeToggleBtn" class="theme-toggle-btn">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Main Content Card -->
+            <div class="main-content-card">
+                <!-- Financial Overview Section -->
+                <div class="financial-overview-section">
+                    <h3 class="section-title">Financial Overview</h3>
+                    <hr class="section-divider">
+                    <p>Total Income: <span id="totalIncome">₹0</span></p>
+                    <p>Total Expenses: <span id="totalExpenses">₹0</span></p>
+                    <p>Current Balance: <span id="netBalance">₹0</span></p>
+                </div>
+
+                <!-- New Transaction Section (Inline) -->
+                <div class="new-transaction-section">
+                    <h3 class="section-title">New Transaction</h3>
+                    <hr class="section-divider">
+                    <form id="transactionForm" class="transaction-form-inline">
+                        <div class="form-group">
+                            <label class="form-label" for="transactionDescription">Description</label>
+                            <input type="text" id="transactionDescription" name="description" class="form-input" placeholder="Description">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="transactionAmount">Amount</label>
+                            <input type="number" id="transactionAmount" name="amount" class="form-input" placeholder="Amount">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="transactionType">Type</label>
+                            <select id="transactionType" name="type" class="form-input" required>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="action-button primary add-transaction-btn-inline">Add Transaction</button>
+                    </form>
+                </div>
+
+                <!-- Transaction History Section -->
+                <div class="transaction-history-section">
+                    <h3 class="section-title">Transaction History</h3>
+                    <hr class="section-divider">
+                    <div class="transactions-table-container">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th data-field="date">Date</th>
+                                    <th data-field="description">Description</th>
+                                    <th data-field="amount">Amount</th>
+                                    <th data-field="type">Type</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTableBody">
+                                <!-- Transactions will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bottom-actions-new">
+                        <button class="action-button secondary" id="clearAllTransactionsBtn">Clear All</button>
+                        <button class="action-button secondary" id="printTransactions">Print Report</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <!-- Scripts -->
+    <script src="js/theme-toggle.js"></script>
+    <script src="js/transactions.js"></script>
+</body>
+</html> 

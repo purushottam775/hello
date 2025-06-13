@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Student Budget Planner Calendar</title>
+
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet"/>
+
+  <!-- SheetJS for Excel Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <!-- jsPDF for PDF Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      color: #003366;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    /* Dark mode styles */
+    body.dark-mode {
+      background: #121212;
+      color: #e0e0e0;
+    }
+    body.dark-mode .navbar {
+      background-color: #1f1f1f;
+    }
+    body.dark-mode .navbar a {
+      color: #e0e0e0;
+    }
+    body.dark-mode .navbar a:hover {
+      background-color: #e0e0e0;
+      color: #121212;
+    }
+    body.dark-mode #calendar {
+      background: #1e1e1e;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+    body.dark-mode #transactionModal {
+      background: #2c2c2c;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      color: #e0e0e0;
+    }
+    body.dark-mode input,
+    body.dark-mode select,
+    body.dark-mode button {
+      background: #444;
+      color: #e0e0e0;
+      border: 1px solid #666;
+    }
+    body.dark-mode input::placeholder {
+      color: #bbb;
+    }
+    body.dark-mode .summary {
+      background: #1e1e1e;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    body.dark-mode .tooltip {
+      background: #e0e0e0dd;
+      color: #121212;
+    }
+
+    .navbar {
+      background-color: #003366;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .navbar a:hover {
+      background-color: white;
+      color: #003366;
+    }
+
+    /* Dropdown container */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Dropdown content */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #003366;
+      min-width: 150px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.3);
+      z-index: 1001;
+      border-radius: 6px;
+      overflow: hidden;
+      top: 40px;
+      right: 0;
+    }
+
+    .dropdown-content button {
+      background-color: transparent;
+      border: none;
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .dropdown-content button:hover {
+      background-color: white;
+      color: #003366;
+    }
+
+    /* Show dropdown on hover */
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    #calendar {
+      max-width: 1200px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+
+    #transactionModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      z-index: 1000;
+      width: 300px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    #transactionModal input,
+    #transactionModal select,
+    #transactionModal button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    #transactionModal button {
+      background-color: #003366;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #transactionModal button:hover {
+      background-color: #001f4d;
+    }
+
+    .export-controls {
+      max-width: 1200px;
+      margin: 20px auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    select, button {
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: 1px solid #003366;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    select:hover, button:hover {
+      background-color: #003366;
+      color: white;
+    }
+
+    .summary {
+      max-width: 1200px;
+      margin: 10px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .summary span {
+      display: inline-block;
+      margin-right: 30px;
+      font-weight: bold;
+    }
+
+    /* Tooltip styling */
+    .tooltip {
+      position: absolute;
+      background: #003366dd;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 9999;
+      display: none;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    body.dark-mode .dropdown-content {
+      background-color: #1f1f1f;
+    }
+
+    body.dark-mode .dropdown-content button:hover {
+      background-color: #e0e0e0;
+      color: #121212;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar section -->
+<nav class="navbar">
+
+  <a href="dashboard.html">Home</a>
+
+  <a id="addTransactionBtn">Add Transaction</a>
+  <a href="Report.html">View Reports</a> <!-- ✅ This now links to Report.html -->
+
+  <div class="dropdown">
+    <a href="#" id="settingsBtn">Settings &#9662;</a>
+    <div class="dropdown-content">
+      <button id="darkModeToggleBtn">Toggle Dark Mode</button>
+      <button id="clearRecordsBtn">Clear All Records</button>
+    </div>
+  </div>
+</nav>
+
+<h1>Smart Student Budget Planner Calendar</h1>
+
+<!-- Export Options -->
+<div class="export-controls">
+  <select id="exportFormat">
+    <option value="excel">Export as Excel</option>
+    <option value="pdf">Export as PDF</option>
+  </select>
+  <button id="exportBtn">Download</button>
+</div>
+
+<!-- Summary -->
+<div class="summary" id="summary">
+  <span id="incomeSummary">Total Income: $0</span>
+  <span id="expenseSummary">Total Expense: $0</span>
+  <span id="savingSummary">Total Saving: $0</span>
+</div>
+
+<!-- Calendar -->
+<div id="calendar"></div>
+
+<!-- Modal -->
+<div id="transactionModal">
+  <h3>Add Transaction</h3>
+  <form id="transactionForm">
+    <label>Title:</label>
+    <input type="text" id="title" required>
+
+    <label>Date:</label>
+    <input type="date" id="date" required>
+
+    <label>Amount ($):</label>
+    <input type="number" id="amount" step="0.01" min="0" required>
+
+    <label>Type:</label>
+    <select id="type">
+      <option value="income">Income</option>
+      <option value="expense">Expense</option>
+      <option value="saving">Saving</option>
+    </select>
+
+    <button type="submit">Add</button>
+    <button type="button" onclick="closeModal()">Cancel</button>
+  </form>
+</div>
+
+<!-- Tooltip div -->
+<div class="tooltip" id="tooltip"></div>
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script>
+  let calendar;
+  let transactions = [];
+
+  // Load transactions from localStorage if available
+  if(localStorage.getItem('transactions')) {
+    transactions = JSON.parse(localStorage.getItem('transactions'));
+  }
+
+  // Load dark mode preference from localStorage
+  if(localStorage.getItem('darkMode') === 'enabled') {
+    document.body.classList.add('dark-mode');
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+    const tooltip = document.getElementById('tooltip');
+
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: ''
+      },
+      events: transactions.map(t => {
+        return {
+          title: `${t.title} $${parseFloat(t.amount).toFixed(2)}`,
+          start: t.date,
+          color: getColorFromType(t.type)
+        };
+      }),
+      eventDidMount: info => {
+        // Add mouse events for tooltip
+        info.el.addEventListener('mouseenter', (e) => {
+          const event = info.event;
+          const [title, amountStr] = event.title.split(' $');
+          const amount = amountStr || '';
+          tooltip.innerHTML = `
+            <strong>${title}</strong><br/>
+            Date: ${event.startStr}<br/>
+            Amount: $${amount}<br/>
+            Type: ${getTypeFromColor(event.backgroundColor || event.color)}
+          `;
+          tooltip.style.display = 'block';
+          tooltip.style.opacity = '1';
+        });
+
+        info.el.addEventListener('mousemove', (e) => {
+          tooltip.style.top = (e.pageY + 15) + 'px';
+          tooltip.style.left = (e.pageX + 15) + 'px';
+        });
+
+        info.el.addEventListener('mouseleave', () => {
+          tooltip.style.display = 'none';
+          tooltip.style.opacity = '0';
+        });
+      }
+    });
+
+    calendar.render();
+    updateSummary();
+  });
+
+  document.getElementById('addTransactionBtn').onclick = () => {
+    document.getElementById('transactionModal').style.display = 'block';
+
+    // Set date input to today's date by default
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById('date').value = today;
+  };
+
+  function closeModal() {
+    document.getElementById('transactionModal').style.display = 'none';
+    document.getElementById('transactionForm').reset();
+  }
+
+  document.getElementById('transactionForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const title = document.getElementById('title').value.trim();
+    const date = document.getElementById('date').value;
+    const amount = parseFloat(document.getElementById('amount').value).toFixed(2);
+    const type = document.getElementById('type').value;
+
+    // Don't allow zero or negative amounts
+    if (amount <= 0) {
+      alert('Please enter an amount greater than zero.');
+      return;
+    }
+
+    const color = getColorFromType(type);
+
+    const event = {
+      title: `${title} $${amount}`,
+      start: date,
+      color: color
+    };
+
+    calendar.addEvent(event);
+
+    transactions.push({ title, date, amount, type });
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+
+    updateSummary();
+    closeModal();
+  });
+
+  function updateSummary() {
+    let income = 0, expense = 0, saving = 0;
+    transactions.forEach(t => {
+      const amt = parseFloat(t.amount);
+      if (t.type === 'income') income += amt;
+      else if (t.type === 'expense') expense += amt;
+      else if (t.type === 'saving') saving += amt;
+    });
+
+    document.getElementById('incomeSummary').textContent = `Total Income: $${income.toFixed(2)}`;
+    document.getElementById('expenseSummary').textContent = `Total Expense: $${expense.toFixed(2)}`;
+    document.getElementById('savingSummary').textContent = `Total Saving: $${saving.toFixed(2)}`;
+  }
+
+  document.getElementById('exportBtn').onclick = () => {
+    const format = document.getElementById('exportFormat').value;
+
+    const data = [
+      ["Title", "Date", "Amount", "Type"],
+      ...transactions.map(t => [t.title, t.date, `$${t.amount}`, t.type])
+    ];
+
+    const summary = [
+      [],
+      ["Summary"],
+      ["Total Income", document.getElementById('incomeSummary').textContent.split(': ')[1]],
+      ["Total Expense", document.getElementById('expenseSummary').textContent.split(': ')[1]],
+      ["Total Saving", document.getElementById('savingSummary').textContent.split(': ')[1]],
+    ];
+
+    if (format === 'excel') {
+      const worksheet = XLSX.utils.aoa_to_sheet([...data, ...summary]);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+      XLSX.writeFile(workbook, "StudentBudgetPlanner.xlsx");
+    } else if (format === 'pdf') {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      let y = 10;
+      doc.setFontSize(14);
+      doc.text("Smart Student Budget Planner", 10, y);
+      y += 10;
+
+      doc.setFontSize(12);
+      data.forEach(row => {
+        doc.text(row.join(" | "), 10, y);
+        y += 8;
+        if (y > 270) {
+          doc.addPage();
+          y = 10;
+        }
+      });
+
+      y += 10;
+      summary.forEach(row => {
+        if (row.length) {
+          doc.text(row.join(": "), 10, y);
+          y += 8;
+        }
+      });
+
+      doc.save("StudentBudgetPlanner.pdf");
+    }
+  };
+
+  // Dark Mode toggle button
+  document.getElementById('darkModeToggleBtn').addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+
+    // Save preference
+    if(document.body.classList.contains('dark-mode')) {
+      localStorage.setItem('darkMode', 'enabled');
+    } else {
+      localStorage.setItem('darkMode', 'disabled');
+    }
+  });
+
+  // Clear All Records button
+  document.getElementById('clearRecordsBtn').addEventListener('click', () => {
+    if(confirm("Are you sure you want to clear all records? This action cannot be undone.")) {
+      transactions = [];
+      localStorage.removeItem('transactions');
+      calendar.getEvents().forEach(event => event.remove());
+      updateSummary();
+    }
+  });
+
+  function getColorFromType(type) {
+    switch(type) {
+      case 'income': return '#28a745';
+      case 'expense': return '#dc3545';
+      case 'saving': return '#007bff';
+      default: return '#6c757d';
+    }
+  }
+
+  function getTypeFromColor(color) {
+    switch(color) {
+      case '#28a745': return 'Income';
+      case '#dc3545': return 'Expense';
+      case '#007bff': return 'Saving';
+      default: return 'Transaction';
+    }
+  }
+</script>
+</body>
+</html>

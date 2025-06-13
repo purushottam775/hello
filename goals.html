@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Up Goals</title>
+    <link rel="stylesheet" href="goals.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Navigation bar styles - positioned at top */
+        .navbar {
+            background-color: #003366;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Add padding to body to account for fixed navbar */
+        body {
+            padding-top: 70px;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-left {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-button {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle i {
+            font-size: 18px;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        body.dark-mode .navbar {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+        }
+
+        body.dark-mode .container {
+            background-color: #2d2d2d;
+        }
+
+        body.dark-mode .header-section,
+        body.dark-mode .form-section,
+        body.dark-mode .saved-goals-section,
+        body.dark-mode #financialLiteracyHubSection {
+            background-color: #2d2d2d;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+
+        body.dark-mode input,
+        body.dark-mode select {
+            background-color: #3d3d3d;
+            color: #ffffff;
+            border-color: #4a4a4a;
+        }
+
+        body.dark-mode .goal-term-option {
+            background-color: #3d3d3d;
+            color: #ffffff;
+        }
+
+        body.dark-mode .goal-term-option.selected {
+            background-color: #4a90e2;
+        }
+
+        /* Transition for theme changes */
+        body, .container, .header-section, .form-section, 
+        .saved-goals-section, #financialLiteracyHubSection,
+        input, select, .goal-term-option {
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        /* Add these styles to your existing styles */
+        .date-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .date-input-container input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            padding-right: 40px; /* Make room for the icon */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .date-icon {
+            position: absolute;
+            right: 10px;
+            color: #666;
+            pointer-events: none; /* Ensures clicks go through to the input */
+        }
+
+        /* Style for the calendar icon in dark mode */
+        body.dark-mode .date-icon {
+            color: #ffffff;
+        }
+
+        /* Custom calendar icon styling */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+
+        /* Dark mode styles for date input */
+        body.dark-mode input[type="date"] {
+            background-color: #3d3d3d;
+            color: #ffffff;
+            border-color: #4a4a4a;
+        }
+
+        /* Enhanced popup styles */
+        .congrats-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .congrats-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            padding: 3rem;
+            border-radius: 30px;
+            text-align: center;
+            color: white;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            transform: scale(0.5) rotate(-10deg);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .congrats-modal.show .modal-content {
+            transform: scale(1) rotate(0deg);
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: rotate 10s linear infinite;
+        }
+
+        .modal-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            color: #FFD700;
+            animation: float 3s ease-in-out infinite;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .modal-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .modal-message {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            animation: fadeIn 0.5s ease-out 0.3s both;
+        }
+
+        .modal-button {
+            background-color: white;
+            color: #FF6B6B;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background-color: #FFD700;
+            color: #FF6B6B;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #FFD700;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes confetti-fall {
+            0% { 
+                transform: translateY(-100vh) rotate(0deg); 
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(100vh) rotate(720deg); 
+                opacity: 0;
+            }
+        }
+
+        /* Dark mode styles */
+        body.dark-mode .modal-content {
+            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+            box-shadow: 0 20px 40px rgba(255,255,255,0.1);
+        }
+
+        body.dark-mode .modal-button {
+            background-color: #4F46E5;
+            color: white;
+        }
+
+        body.dark-mode .modal-button:hover {
+            background-color: #FFD700;
+            color: #2d2d2d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Modal -->
+    <div class="congrats-modal" id="congratsModal">
+        <div class="modal-content">
+            <i class="fas fa-trophy modal-icon"></i>
+            <h2 class="modal-title">Goal Achieved! 🎉</h2>
+            <p class="modal-message">Congratulations! You've reached your financial goal! This is a fantastic achievement in your financial journey. Keep up the great work!</p>
+            <button class="modal-button" onclick="closeCongratsModal()">
+                <i class="fas fa-check-circle"></i> Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation Bar - Now at the very top -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="dashboard.html" class="nav-button">
+                <i class="fas fa-home"></i>
+                Home
+            </a>
+        </div>
+        <div class="nav-right">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-sun"></i>
+                <span>Toggle Theme</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h1><i class="fas fa-bullseye"></i> Set Your Money Goals With SavyMoney</h1>
+            <p>Dream it. Plan it. Achieve it!</p>
+        </div>
+
+        <!-- Create New Goal Section -->
+        <div class="form-section">
+            <h2>Create New Goal</h2>
+            <form id="goalForm">
+                <div class="form-group input-icon-group">
+                    <label for="goalName">Goal Name (e.g., New Phone, College Fund)</label>
+                    <input type="text" id="goalName" name="goalName" placeholder="e.g., New Phone, College Fund" required>
+                    <i class="fas fa-info-circle info-icon"></i>
+                </div>
+
+                <div class="icons-group">
+                    <i class="fas fa-money-bill-wave icon-item"></i>
+                    <i class="fas fa-calculator icon-item"></i>
+                    <i class="fas fa-graduation-cap icon-item"></i>
+                    <i class="fas fa-gamepad icon-item"></i>
+                </div>
+
+                <div class="form-group input-icon-group">
+                    <label for="currentSavings">Current Savings (₹)</label>
+                    <input type="number" id="currentSavings" name="currentSavings" step="0.01" value="0" required>
+                    <i class="fas fa-info-circle info-icon"></i>
+                </div>
+
+                <div class="form-group input-icon-group">
+                    <label for="targetAmount">Target Amount (₹)</label>
+                    <input type="number" id="targetAmount" name="targetAmount" step="0.01" required>
+                    <i class="fas fa-info-circle info-icon"></i>
+                </div>
+
+                <div class="form-group input-icon-group">
+                    <label for="targetDate">Target Date</label>
+                    <div class="date-input-container">
+                        <input type="date" id="targetDate" name="targetDate" required>
+                        <i class="fas fa-calendar-alt date-icon" id="calendarIcon"></i>
+                    </div>
+                </div>
+                
+                <div class="form-group input-icon-group">
+                    <label for="weeklySavings">Weekly Savings (₹)</label>
+                    <input type="number" id="weeklySavings" name="weeklySavings" step="0.01" required>
+                    <i class="fas fa-info-circle info-icon"></i>
+                </div>
+
+                <div class="goal-term-selection">
+                    <div class="goal-term-option selected" data-term="short">
+                        Short Term<br>(0-6 months)
+                    </div>
+                    <div class="goal-term-option" data-term="medium">
+                        Medium Term<br>(6-12 months)
+                    </div>
+                    <div class="goal-term-option" data-term="long">
+                        Long Term<br>(1+ years)
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-save-goal">Save Goal</button>
+            </form>
+        </div>
+
+        <!-- Saved Goals Section -->
+        <div class="saved-goals-section">
+            <h2>Your Goals</h2>
+            <div id="goalsList">
+                <!-- Goal cards will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Financial Literacy Hub Section -->
+        <div id="financialLiteracyHubSection">
+            <h1 class="main-title">Financial Literacy Hub</h1>
+
+            <div class="section">
+                <h2>Daily Financial Tip</h2>
+                <p>Did you know? Setting financial goals can make saving more fun!</p>
+            </div>
+
+            <div class="section">
+                <h2>Savings Simulator</h2>
+                <p>Calculate how much you can save over time!</p>
+                <div class="input-group">
+                    <input type="number" id="weeklySavingsLiteracy" placeholder="Weekly Savings (₹)" required>
+                    <input type="number" id="numWeeksLiteracy" placeholder="Number of Weeks" required>
+                    <input type="number" id="annualInterestRateLiteracy" placeholder="Annual Interest Rate (%)" step="0.01" value="0">
+                </div>
+                <button id="simulateSavingsBtnLiteracy" class="btn-simulate">Simulate Savings</button>
+                <div id="simulationResultLiteracy" class="result-box"></div>
+            </div>
+
+            <div class="parent-link">
+                <a href="#">Parent Dashboard</a>
+            </div>
+        </div>
+    </div>
+    <script src="goals.js"></script>
+    <script>
+        // Add theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            updateThemeIcon(isDarkMode ? 'dark' : 'light');
+        });
+
+        function updateThemeIcon(theme) {
+            themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        // Add this to your existing script
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('targetDate');
+            const calendarIcon = document.getElementById('calendarIcon');
+
+            // Set min date to today
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+
+            // Add click event to calendar icon
+            calendarIcon.addEventListener('click', function() {
+                dateInput.showPicker();
+            });
+
+            // Update icon color on input focus
+            dateInput.addEventListener('focus', function() {
+                calendarIcon.style.color = '#003366';
+            });
+
+            dateInput.addEventListener('blur', function() {
+                calendarIcon.style.color = '';
+            });
+        });
+
+        // Enhanced popup functions
+        function showCongratsModal() {
+            const modal = document.getElementById('congratsModal');
+            modal.classList.add('show');
+            createConfetti();
+            playSuccessSound();
+        }
+
+        function closeCongratsModal() {
+            const modal = document.getElementById('congratsModal');
+            modal.classList.remove('show');
+        }
+
+        function createConfetti() {
+            const colors = ['#FFD700', '#FF69B4', '#4F46E5', '#7C3AED', '#00FF00', '#FF6B6B', '#4ECDC4'];
+            const shapes = ['circle', 'square', 'triangle'];
+            const modal = document.getElementById('congratsModal');
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.clipPath = shapes[Math.floor(Math.random() * shapes.length)] === 'circle' ? 'circle(50%)' : 
+                                        shapes[Math.floor(Math.random() * shapes.length)] === 'triangle' ? 'polygon(50% 0%, 0% 100%, 100% 100%)' : 'none';
+                confetti.style.animation = `confetti-fall ${Math.random() * 3 + 2}s linear forwards`;
+                modal.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        function playSuccessSound() {
+            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log('Audio play failed:', e));
+        }
+
+        // Modify your existing goal completion check
+        function checkGoalCompletion(goal) {
+            if (parseFloat(goal.currentAmount) >= parseFloat(goal.targetAmount)) {
+                showCongratsModal();
+                // Your existing goal completion logic
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('congratsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCongratsModal();
+            }
+        });
+    </script>
+</body>
+</html> 
+</html> 

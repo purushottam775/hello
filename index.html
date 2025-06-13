@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SavyMoney - Smarter Finance</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Unified Navbar: logo left, links center, buttons right -->
+    <nav class="navbar unified-navbar">
+        <div class="nav-brand">
+            <a href="#hero">
+                <i class="fas fa-coins"></i>
+                <span>SavyMoney</span>
+            </a>
+        </div>
+        <div class="nav-center">
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark and light mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="login.html" class="login-btn">Login</a>
+            <a href="signup.html" class="signup-btn">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Main Content: All sections outside navbar -->
+    <main>
+        <header id="hero" class="hero">
+            <div class="hero-content">
+                <h1>Smarter Finance, Brighter Future</h1>
+                <p>Track your stocks, set goals, and take control of your financial journey with SavyMoney.</p>
+                <button class="cta-button" onclick="window.location.href='signup.html'">Get Started Free</button>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1515168833906-d2a3b82b302b?auto=format&fit=crop&w=600&q=80" alt="Finance Illustration">
+            </div>
+        </header>
+
+        <section id="features" class="features">
+            <h2>Our Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>Stocks News</h3>
+                    <p>Stay updated with the latest stock market news and trends.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Finance Tracking</h3>
+                    <p>Monitor your investments and finances in real time.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>Goal Setting</h3>
+                    <p>Set, track, and achieve your financial goals easily.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-question-circle"></i>
+                    <h3>Personalized Quiz</h3>
+                    <p>Take our quiz to get personalized financial advice and tips.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="how-it-works">
+            <h2>How It Works</h2>
+            <div class="how-steps">
+                <div class="how-step">
+                    <span class="step-number">1</span>
+                    <h4>Create Your Account</h4>
+                    <p>Sign up in seconds and set up your financial profile.</p>
+                </div>
+                <div class="how-step">
+                    <span class="step-number">2</span>
+                    <h4>Connect & Track</h4>
+                    <p>Link your accounts and start tracking your stocks and finances.</p>
+                </div>
+                <div class="how-step">
+                    <span class="step-number">3</span>
+                    <h4>Set Goals & Learn</h4>
+                    <p>Set your goals, take the quiz, and get personalized insights.</p>
+                </div>
+                <div class="how-step">
+                    <span class="step-number">4</span>
+                    <h4>Grow & Succeed</h4>
+                    <p>Watch your progress and achieve your financial dreams!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-modern">
+        <div class="footer-modern-content">
+            <div class="footer-modern-col">
+                <h4>Products</h4>
+                <ul>
+                    <li><a href="#">Stocks News</a></li>
+                    <li><a href="#">Finance Tracking</a></li>
+                    <li><a href="#">Goal Setting</a></li>
+                    <li><a href="#">Personalized Quiz</a></li>
+                </ul>
+            </div>
+            <div class="footer-modern-col">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="footer-modern-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-modern-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-modern-bottom">
+            <span>&copy; 2025 SavyMoney. All rights reserved.</span>
+            <div class="footer-modern-links">
+                <a href="#">Terms of service</a>
+                <span>|</span>
+                <a href="#">Privacy policy</a>
+                <span>|</span>
+                <a href="#">Safety &amp; security</a>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html> 

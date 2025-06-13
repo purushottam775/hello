@@ -1,0 +1,216 @@
+body {
+    background: #23243a;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.navbar {
+    width: 100vw;
+    background: #2d2e4a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px #0002;
+}
+
+.navbar .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar .brand {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #a99cff;
+    text-decoration: none;
+}
+
+.navbar .home-btn {
+    background: #a99cff;
+    color: #23243a;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 1rem;
+    transition: background 0.2s, color 0.2s;
+    text-decoration: none;
+}
+
+.navbar .home-btn:hover {
+    background: #fff;
+    color: #a99cff;
+}
+
+.theme-toggle {
+    background: #393a5a;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: #a99cff;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background: #a99cff;
+    color: #23243a;
+}
+
+.quiz-container {
+    background: #2d2e4a;
+    padding: 2rem 3rem;
+    border-radius: 16px;
+    box-shadow: 0 0 24px #0004;
+    width: 350px;
+    text-align: center;
+    margin-top: 80px;
+}
+
+h1 {
+    color: #a99cff;
+    margin-bottom: 1.5rem;
+}
+
+#quiz {
+    margin-bottom: 1.5rem;
+}
+
+.option {
+    background: #393a5a;
+    border: none;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.option:hover, .option.selected {
+    background: #a99cff;
+    color: #23243a;
+}
+
+#start-btn {
+    background: linear-gradient(90deg, #a99cff 0%, #6c63ff 100%);
+    color: #23243a;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 16px #0002;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+    letter-spacing: 1px;
+}
+
+#start-btn:hover {
+    background: linear-gradient(90deg, #6c63ff 0%, #a99cff 100%);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+#next-btn {
+    background: #a99cff;
+    color: #23243a;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+#next-btn:disabled {
+    background: #393a5a;
+    color: #888;
+    cursor: not-allowed;
+}
+
+#result {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+    color: #a99cff;
+}
+
+body.light-mode {
+    background: #f4f4fa;
+    color: #23243a;
+}
+
+body.light-mode .quiz-container {
+    background: #fff;
+    color: #23243a;
+    box-shadow: 0 0 24px #bbb4;
+}
+
+body.light-mode .navbar {
+    background: #fff;
+    box-shadow: 0 2px 8px #bbb4;
+}
+
+body.light-mode .navbar .brand {
+    color: #6c63ff;
+}
+
+body.light-mode .navbar .home-btn {
+    background: #6c63ff;
+    color: #fff;
+}
+
+body.light-mode .navbar .home-btn:hover {
+    background: #a99cff;
+    color: #23243a;
+}
+
+body.light-mode .theme-toggle {
+    background: #e0e0f7;
+    color: #6c63ff;
+}
+
+body.light-mode .theme-toggle:hover {
+    background: #6c63ff;
+    color: #fff;
+}
+body.light-mode .option {
+    background: #e0e0f7;
+    color: #23243a;
+}
+body.light-mode .option:hover, body.light-mode .option.selected {
+    background: #a99cff;
+    color: #fff;
+}
+body.light-mode #start-btn {
+    background: linear-gradient(90deg, #6c63ff 0%, #a99cff 100%);
+    color: #fff;
+}
+body.light-mode #start-btn:hover {
+    background: linear-gradient(90deg, #a99cff 0%, #6c63ff 100%);
+    color: #23243a;
+} 

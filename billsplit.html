@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bill Splitting Dashboard</title>
+    <link rel="stylesheet" href="billsplit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#.html" class="home-btn"><i class="fas fa-home"></i> Home</a>
+            <span class="brand">Bill Splitter</span>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <i class="fas fa-moon" id="moonIcon"></i>
+            <i class="fas fa-sun" id="sunIcon" style="display:none;"></i>
+        </button>
+    </nav>
+    <div class="billsplit-container">
+        <h1>Shared Bill Splitting</h1>
+        <form id="billForm">
+            <label>Description:</label>
+            <input type="text" id="billDesc" placeholder="e.g. Dinner at Cafe" required>
+            <label>Total Amount (₹):</label>
+            <input type="number" id="billAmount" min="0" step="0.01" required>
+            <label>Number of Participants:</label>
+            <input type="number" id="numParticipants" min="2" max="20" required>
+            <div id="participantFields"></div>
+            <label>Split Method:</label>
+            <select id="splitMethod">
+                <option value="equal">Equal Split</option>
+                <option value="custom">Custom Split</option>
+            </select>
+            <div id="customSplitInputs" style="display:none;"></div>
+            <button type="submit" id="addBillBtn">Add Shared Bill</button>
+        </form>
+        <div id="owedSummary"></div>
+        <div id="paymentTracking"></div>
+        <button id="settleUpBtn" style="display:none;">Settle Up</button>
+        <h2>Expense History</h2>
+        <button id="clearAllBtn" style="margin-bottom:10px;">Clear All</button>
+        <div id="expenseHistory"></div>
+    </div>
+    <script src="billsplit.js"></script>
+</body>
+</html> 

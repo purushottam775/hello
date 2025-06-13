@@ -1,0 +1,279 @@
+.auth-body {
+    background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+}
+
+.auth-card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h1 {
+    color: #1a73e8;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.auth-header p {
+    color: #5f6368;
+}
+
+.auth-form .form-group {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group i {
+    position: absolute;
+    left: 12px;
+    color: #5f6368;
+}
+
+.input-group .toggle-password {
+    left: auto;
+    right: 12px;
+    cursor: pointer;
+}
+
+.auth-form input:not([type="checkbox"]) {
+    width: 100%;
+    padding: 12px 40px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.auth-form input:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.remember-me, .terms {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #5f6368;
+}
+
+.forgot-password {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 14px;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.auth-button:hover {
+    background: #1557b0;
+}
+
+.otp-button {
+    background: #34a853;
+}
+
+.otp-button:hover {
+    background: #2d8d47;
+}
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: #dadce0;
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+.divider span {
+    background: white;
+    padding: 0 10px;
+    color: #5f6368;
+    font-size: 0.9rem;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #5f6368;
+}
+
+.auth-footer a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #5f6368;
+}
+
+.otp-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 25px 0;
+}
+
+.otp-input {
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    font-size: 1.2rem;
+    border: 2px solid #dadce0;
+    border-radius: 8px;
+}
+
+.otp-input:focus {
+    border-color: #1a73e8;
+    outline: none;
+}
+
+.resend-otp {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #5f6368;
+}
+
+.resend-otp a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Password Strength Meter */
+.password-strength {
+    margin-top: 10px;
+}
+
+.strength-meter {
+    height: 4px;
+    background: #dadce0;
+    border-radius: 2px;
+    margin-bottom: 5px;
+}
+
+.strength-meter::before {
+    content: '';
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    width: 0;
+}
+
+.weak .strength-meter::before {
+    width: 33%;
+    background: #ea4335;
+}
+
+.medium .strength-meter::before {
+    width: 66%;
+    background: #fbbc04;
+}
+
+.strong .strength-meter::before {
+    width: 100%;
+    background: #34a853;
+}
+
+.strength-text {
+    font-size: 0.8rem;
+    color: #5f6368;
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 30px 20px;
+    }
+
+    .otp-input-container {
+        gap: 5px;
+    }
+
+    .otp-input {
+        width: 40px;
+        height: 40px;
+    }
+} 
